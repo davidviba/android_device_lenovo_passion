@@ -26,7 +26,7 @@
 #
 
 # the DIAG device node is not world writable/readable.
-/dev/diag                 0660   system     diag
+/dev/diag                 0660   system     oem_2901
 
 /dev/genlock              0666   system     system
 /dev/kgsl                 0666   system     system
@@ -34,7 +34,7 @@
 /dev/kgsl-2d0             0666   root       root
 /dev/kgsl-2d1             0666   root       root
 /dev/ion                  0664   system     system
-/dev/rtc0                 0600   system     system
+/dev/rtc0                 0660   system     system
 /dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd_cxm_qmi          0640   radio      radio
@@ -50,7 +50,9 @@
 
 # lenovo-sw zhangrc2 change NXP SmartPA mode begin
 /dev/i2c_smartpa              0660   media      media
+/dev/tiload_node          0660   system     system
 # lenovo-sw zhangrc2 change NXP SmartPA mode end
+
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
 
@@ -221,7 +223,7 @@
 /dev/assd                 0660    nfc         nfc
 
 #lenovo-sw lumy1 add for BRCM NFC
-/dev/bcm2079x		0660	nfc	nfc
+/dev/bcm2079x	     	0660	   nfc	   nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system

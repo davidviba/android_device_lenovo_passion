@@ -31,16 +31,21 @@ TARGET_USES_64_BIT_BINDER := true
 TARGET_OTA_ASSERT_DEVICE := p1a42,passion_row,p1a41,passion
 
 # Audio
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 BOARD_USES_ALSA_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
+USE_LEGACY_LOCAL_AUDIO_HAL := true
+
+# HWUI
+HWUI_COMPILE_FOR_PERF := true
 
 # ANT+
-BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
+BOARD_ANT_WIRELESS_DEVICE := "qualcomm-uart"
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
-BLUETOOTH_HCI_USE_MCT := true
+QCOM_BT_READ_ADDR_FROM_PROP := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lenovo/passion/bluetooth
 
 # Board
@@ -49,6 +54,7 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 TARGET_NO_BOOTLOADER := true
 
 # Camera
+TARGET_USES_NON_TREBLE_CAMERA := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
@@ -57,8 +63,7 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
 
 # Charger
-BOARD_CHARGER_ENABLE_SUSPEND := true
-BACKLIGHT_PATH := "/sys/class/leds/button-backlight/brightness"
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # Lineagehw
 BOARD_HARDWARE_CLASS += \
@@ -86,8 +91,9 @@ BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # GPS
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
-BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
+USE_DEVICE_SPECIFIC_GPS := true
+USE_DEVICE_SPECIFIC_LOC_API := true
+TARGET_NO_RPC := true
 
 # GPU
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
@@ -96,14 +102,11 @@ TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
 TARGET_USES_GRALLOC1 := true
-TARGET_USES_HWC2 := true
 
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
-VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
 
 # Init
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
@@ -131,9 +134,6 @@ TARGET_LEGACY_HW_DISK_ENCRYPTION := true
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
-# NFC
-BOARD_NFC_HAL_SUFFIX := $(TARGET_BOARD_PLATFORM)
-
 # Partition
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -145,15 +145,23 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 27376204800
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 
+# Use mke2fs to create ext4 images
+TARGET_USES_MKE2FS := true
+
 # Properties
 TARGET_SYSTEM_PROP += device/lenovo/passion/system.prop
 
 # Qualcomm support
 BOARD_USES_QC_TIME_SERVICES := true
-TARGET_POWERHAL_VARIANT := qcom
-TARGET_TAP_TO_WAKE_NODE := "/sys/board_properties/tpd_suspend_status"
 BOARD_USES_QCOM_HARDWARE := true
 MALLOC_SVELTE := true
+
+# Power
+TARGET_HAS_LEGACY_POWER_STATS := true
+TARGET_HAS_NO_WIFI_STATS := true
+TARGET_USES_INTERACTION_BOOST := true
+TARGET_HAS_NO_POWER_STATS := true
+TARGET_TAP_TO_WAKE_NODE := "/sys/board_properties/tpd_suspend_status"
 
 # Recovery
 TARGET_RECOVERY_FSTAB := device/lenovo/passion/rootdir/etc/fstab.qcom
@@ -176,12 +184,11 @@ include device/qcom/sepolicy/legacy-sepolicy.mk
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
-    /system/vendor/lib/libmmcamera2_stats_algorithm.so|libc_util.so \
-    /system/vendor/lib/libmmcamera_wavelet_lib.so|libc_util.so
+    /system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so \
+    /system/vendor/lib/libmmcamera_wavelet_lib.so|libshim_atomic.so
 
 # WiFi
 BOARD_HAS_QCOM_WLAN := true
-BOARD_HAS_QCOM_WLAN_SDK := true
 BOARD_HOSTAPD_DRIVER := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_WLAN_DEVICE := qcwcn

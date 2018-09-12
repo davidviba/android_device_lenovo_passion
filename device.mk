@@ -15,13 +15,13 @@
 #
 
 # Overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay \
-                           $(LOCAL_PATH)/overlay-lineage
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay \
+    $(LOCAL_PATH)/overlay-lineage
 
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-$(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-hwui-memory.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-3072-dalvik-heap.mk)
 
 # Permissions
@@ -52,26 +52,38 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.camera.full.xml:system/etc/permissions/android.hardware.camera.full.xml \
+    frameworks/native/data/etc/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
 
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
+    android.hardware.audio@2.0-service \
     android.hardware.audio.effect@2.0-impl \
+    android.hardware.audio.effect@2.0-service \
     android.hardware.soundtrigger@2.0-impl \
     android.hardware.broadcastradio@1.0-impl \
-    audiod \
     audio.a2dp.default \
     audio.r_submix.default \
     audio.usb.default \
     libaudio-resampler \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libqcompostprocbundle \
-    tinymix
+    libqcompostprocbundle
 
 PRODUCT_COPY_FILES += \
    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf
+
+# DRM
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-lite \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service
+
+# Maintainer
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.bootleggers.maintainer=Daniel Mokarov
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -85,8 +97,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    Snap \
-    libc_util \
+    libshim_atomic \
     camera.msm8916 \
     android.hardware.camera.provider@2.4-impl \
     camera.device@1.0-impl
@@ -98,6 +109,7 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service \
     copybit.msm8916 \
     gralloc.msm8916 \
     hwcomposer.msm8916 \
@@ -108,7 +120,8 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.0-service
+    android.hardware.biometrics.fingerprint@2.1-service \
+    fingerprint.msm8916
 
 # ANT+
 PRODUCT_PACKAGES += \
@@ -124,13 +137,16 @@ PRODUCT_PACKAGES += \
     FMRadio \
     libfmjni
 
+# Prebuilt
+PRODUCT_PACKAGES += \
+    GoogleClock \
+    Recorder \
+    MotoCamera
+
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl
-
-# GNSS HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl
+    android.hardware.gatekeeper@1.0-impl \
+    android.hardware.gatekeeper@1.0-service
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
@@ -138,31 +154,26 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_PACKAGES += \
-    gps.msm8916
+    libgnss \
+    libgnsspps
 
 PRODUCT_PACKAGES += \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    lowi.conf \
-    sap.conf
+    android.hardware.gnss@1.0-impl-qti \
+    android.hardware.gnss@1.0-service-qti
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/gps/etc/flp.conf:$(TARGET_COPY_OUT_VENDOR)/etc/flp.conf \
+    $(LOCAL_PATH)/gps/etc/gps.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gps.conf \
+    $(LOCAL_PATH)/gps/etc/izat.conf:$(TARGET_COPY_OUT_VENDOR)/etc/izat.conf \
+    $(LOCAL_PATH)/gps/etc/lowi.conf:$(TARGET_COPY_OUT_VENDOR)/etc/lowi.conf \
+    $(LOCAL_PATH)/gps/etc/sap.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sap.conf \
+    $(LOCAL_PATH)/gps/etc/xtwifi.conf:$(TARGET_COPY_OUT_VENDOR)/etc/xtwifi.conf
 
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
     android.hidl.manager@1.0 \
     android.hidl.manager@1.0-java
-
-# Camera-face detection
-PRODUCT_PACKAGES += \
-    org.codeaurora.camera \
-    org.codeaurora.camera.xml
-
-PRODUCT_BOOT_JARS += \
-    org.codeaurora.camera
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.camera.facedetect=1
 
 # Healthd
 PRODUCT_PACKAGES += \
@@ -187,7 +198,8 @@ PRODUCT_PACKAGES += \
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl
+    android.hardware.renderscript@1.0-impl \
+    android.hardware.renderscript@1.0-service
 
 # Keylayout
 PRODUCT_COPY_FILES += \
@@ -195,12 +207,13 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/ft5x06_ts.kl:system/usr/keylayout/ft5x06_ts.kl \
     $(LOCAL_PATH)/keylayout/goodix_ts.kl:system/usr/keylayout/goodix_ts.kl \
     $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
+    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
 
 # Keystore
 PRODUCT_PACKAGES += \
     keystore.msm8916 \
-    android.hardware.keymaster@3.0-impl
+    android.hardware.keymaster@3.0-impl \
+    android.hardware.keymaster@3.0-service
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -216,7 +229,8 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/configs/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
     $(LOCAL_PATH)/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml \
-    $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml
+    $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/00banner:system/etc/init.d/00banner
 
 # Media
 PRODUCT_PACKAGES += \
@@ -235,7 +249,6 @@ PRODUCT_PACKAGES += \
 # Netutils
 PRODUCT_PACKAGES += \
     android.system.net.netd@1.0 \
-    libandroid_net \
     netutils-wrapper-1.0
 
 # NFC
@@ -250,8 +263,7 @@ PRODUCT_PACKAGES += \
 
 # Power HAL
 PRODUCT_PACKAGES += \
-    power.msm8916 \
-    android.hardware.power@1.0-impl
+    android.hardware.power@1.0-service-qti
 
 # IRSC
 PRODUCT_COPY_FILES += \
@@ -274,7 +286,8 @@ PRODUCT_PACKAGES += \
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy
+    $(LOCAL_PATH)/seccomp/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy \
+    $(LOCAL_PATH)/seccomp/mediaextractor.policy:system/vendor/etc/seccomp_policy/mediaextractor.policy
 
 # Sensor
 PRODUCT_COPY_FILES += \
@@ -301,12 +314,9 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wcnss_service \
     wificond \
-    wifilogd \
     hostapd \
     libwifi-hal-qcom \
     libcld80211 \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     wpa_supplicant \
     wpa_supplicant.conf
 

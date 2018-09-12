@@ -22,16 +22,19 @@
 */
 
 #define LOG_NDEBUG 0
-
 #define LOG_TAG "CameraWrapper"
 #include <cutils/log.h>
+#include <cutils/properties.h>
 
-#include <utils/threads.h>
-#include <utils/String8.h>
 #include <hardware/hardware.h>
 #include <hardware/camera.h>
+#include <utils/threads.h>
+#include <utils/String8.h>
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
+
+#define OPEN_RETRIES    10
+#define OPEN_RETRY_MSEC 40
 
 using namespace android;
 
@@ -46,13 +49,6 @@ static void *gUserCameraDevice = NULL;
 
 static char **fixed_set_params = NULL;
 
-const char KEY_QC_LONGSHOT_SUPPORTED[] = "longshot-supported";
-const char KEY_QC_MANUAL_FOCUS_POSITION[] = "manual-focus-position";
-const char KEY_QC_MANUAL_FOCUS_POS_TYPE[] = "manual-focus-pos-type";
-const char KEY_QC_FOCUS_POSITION_SCALE[] = "cur-focus-scale";
-const char KEY_QC_FOCUS_POSITION_DIOPTER[] = "cur-focus-diopter";
-const char KEY_QC_HDR_NEED_1X[] = "hdr-need-1x";
-
 static int camera_device_open(const hw_module_t *module, const char *name,
         hw_device_t **device);
 static int camera_get_number_of_cameras(void);
@@ -65,10 +61,10 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
-        .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
-        .hal_api_version = HARDWARE_HAL_API_VERSION,
+        .version_major = 1,
+        .version_minor = 0,
         .id = CAMERA_HARDWARE_MODULE_ID,
-        .name = "MSM8916 Camera Wrapper",
+        .name = "Passion Camera Wrapper",
         .author = "The CyanogenMod Project",
         .methods = &camera_module_methods,
         .dso = NULL, /* remove compilation warnings */
@@ -83,6 +79,7 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     .init = NULL, /* remove compilation warnings */
     .reserved = {0}, /* remove compilation warnings */
 };
+
 
 typedef struct wrapper_camera_device {
     camera_device_t base;
@@ -109,11 +106,11 @@ static int check_vendor_module()
     rv = hw_get_module_by_class("camera", "vendor",
             (const hw_module_t**)&gVendorModule);
     if (rv)
-        ALOGE("%s: failed to open vendor camera module", __FUNCTION__);
+        ALOGE("failed to open vendor camera module");
     return rv;
 }
 
-static char *camera_fixup_getparams(int id __unused, const char *settings)
+static char *camera_fixup_getparams(int id, const char *settings)
 {
     CameraParameters params;
     params.unflatten(String8(settings));
@@ -123,30 +120,8 @@ static char *camera_fixup_getparams(int id __unused, const char *settings)
     params.dump();
 #endif
 
-    params.remove(KEY_QC_LONGSHOT_SUPPORTED);
-    params.remove(CameraParameters::KEY_AUTO_WHITEBALANCE_LOCK_SUPPORTED);
-
-    params.set(CameraParameters::KEY_SUPPORTED_SCENE_MODES, "auto,hdr");
-
-    const char *manualFocusPosition =
-            params.get(KEY_QC_MANUAL_FOCUS_POSITION);
-    const char *manualFocusPositionType =
-            params.get(KEY_QC_MANUAL_FOCUS_POS_TYPE);
-    if (manualFocusPositionType != NULL) {
-        if (!strcmp(manualFocusPositionType, "2")) {
-            if (manualFocusPosition != NULL) {
-                params.set(KEY_QC_FOCUS_POSITION_SCALE, manualFocusPosition);
-            } else {
-                params.set(KEY_QC_FOCUS_POSITION_SCALE, "0");
-            }
-        } else if (!strcmp(manualFocusPositionType, "3")) {
-            if (manualFocusPosition != NULL) {
-                params.set(KEY_QC_FOCUS_POSITION_DIOPTER, manualFocusPosition);
-            } else {
-                params.set(KEY_QC_FOCUS_POSITION_DIOPTER, "0");
-            }
-        }
-    }
+    params.set("face-detection-values", "off,on");
+    params.set("denoise-values", "denoise-off,denoise-on");
 
 #if !LOG_NDEBUG
     ALOGV("%s: fixed parameters:", __FUNCTION__);
@@ -172,7 +147,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
     const char *sceneMode = params.get(CameraParameters::KEY_SCENE_MODE);
     if (sceneMode != NULL) {
         if (!strcmp(sceneMode, CameraParameters::SCENE_MODE_HDR)) {
-            params.remove(KEY_QC_HDR_NEED_1X);
+            params.remove("zsl");
         }
     }
 
@@ -447,7 +422,6 @@ static char *camera_get_parameters(struct camera_device *device)
     char *tmp = camera_fixup_getparams(CAMERA_ID(device), params);
     VENDOR_CALL(device, put_parameters, params);
     params = tmp;
-
     return params;
 }
 
@@ -596,9 +570,16 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         camera_device->camera_released = false;
         camera_device->id = cameraid;
 
-        rv = gVendorModule->common.methods->open(
-                (const hw_module_t*)gVendorModule, name,
-                (hw_device_t**)&(camera_device->vendor));
+        int retries = OPEN_RETRIES;
+        bool retry;
+        do {
+            rv = gVendorModule->common.methods->open(
+                    (const hw_module_t*)gVendorModule, name,
+                    (hw_device_t**)&(camera_device->vendor));
+            retry = --retries > 0 && rv;
+            if (retry)
+                usleep(OPEN_RETRY_MSEC * 1000);
+        } while (retry);
         if (rv) {
             ALOGE("vendor camera open fail");
             goto fail;
@@ -616,7 +597,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_ops, 0, sizeof(*camera_ops));
 
         camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+        camera_device->base.common.version = CAMERA_MODULE_API_VERSION_1_0;
         camera_device->base.common.module = (hw_module_t *)(module);
         camera_device->base.common.close = camera_device_close;
         camera_device->base.ops = camera_ops;
