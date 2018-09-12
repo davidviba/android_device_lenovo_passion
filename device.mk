@@ -81,10 +81,6 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service
 
-# Maintainer
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.bootleggers.maintainer=Daniel Mokarov
-
 # Bluetooth
 PRODUCT_PACKAGES += \
     libbt-vendor \
@@ -97,6 +93,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
+    Snap \
     libshim_atomic \
     camera.msm8916 \
     android.hardware.camera.provider@2.4-impl \
@@ -140,8 +137,7 @@ PRODUCT_PACKAGES += \
 # Prebuilt
 PRODUCT_PACKAGES += \
     GoogleClock \
-    Recorder \
-    MotoCamera
+    Recorder
 
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
@@ -230,7 +226,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
     $(LOCAL_PATH)/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/00banner:system/etc/init.d/00banner
 
 # Media
 PRODUCT_PACKAGES += \
