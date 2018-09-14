@@ -73,7 +73,7 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle
 
 PRODUCT_COPY_FILES += \
-   $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf
+   $(LOCAL_PATH)/audio/audio_effects.xml:system/vendor/etc/audio_effects.xml
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -136,6 +136,8 @@ PRODUCT_PACKAGES += \
 
 # Prebuilt
 PRODUCT_PACKAGES += \
+    MotoCamera \
+    LedTrigger \
     GoogleClock \
     Recorder
 

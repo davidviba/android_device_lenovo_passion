@@ -1,1 +1,1 @@
-type vfsspi_device, dev_type;
+type vfs_device, dev_type;
