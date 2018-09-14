@@ -1,16 +1,13 @@
-# Fast charger
 type fast_charger_sw, domain;
-type fast_charger_sw_exec, exec_type, file_type;
+type fast_charger_sw, exec_type, system_file_type, file_type;
 
 init_daemon_domain(fast_charger_sw)
 
-allow fast_charger_sw sysfs_fast_charger_sw:file rw_file_perms;
-allow fast_charger_sw sysfs_fast_charger_sw:file setattr;
-allow fast_charger_sw sysfs_fast_charger_sw:dir search;
-allow fast_charger_sw sysfs:file { read open write };
-allow fast_charger_sw device:dir write;
-allow fast_charger_sw kmsg_device:chr_file { write open };
-allow fast_charger_sw self:netlink_kobject_uevent_socket { read create bind setopt };
-allow fast_charger_sw sysfs:file write;
-allow fast_charger_sw self:capability net_admin;
 allow fast_charger_sw self:capability2 block_suspend;
+allow fast_charger_sw self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
+
+allow fast_charger_sw sysfs_graphics:dir search;
+allow fast_charger_sw sysfs_graphics:file r_file_perms;
+
+allow fast_charger_sw sysfs_usb_supply:dir search;
+allow fast_charger_sw sysfs_usb_supply:file rw_file_perms;

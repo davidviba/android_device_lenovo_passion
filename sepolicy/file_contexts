@@ -1,30 +1,31 @@
 # Audio
-/dev/i2c_smartpa(/.*)?     		 	        			u:object_r:audio_device:s0
-
-# Binaries
-/system/bin/fast_charger_sw 							u:object_r:fast_charger_sw_exec:s0
-/system/bin/vfmService								u:object_r:vfmService_exec:s0
+/dev/i2c_smartpa                                                           u:object_r:audio_device:s0
 
 # Block devices
-/dev/block/platform/soc.0/7824900.sdhci/by-name/persist                     u:object_r:persist_block_device:s0
+/dev/block/platform/soc\.0/7824900\.sdhci/by-name/persist                     u:object_r:persist_block_device:s0
 
 # Fastcharger
-/sys/devices/soc.0/gpio_keys.69(/.*)?						u:object_r:sysfs_fast_charger_sw:s0
-/sys/devices/soc.0/78b8000.i2c/i2c-4/4-006b/power_supply/ext-charger(/.*)?	u:object_r:sysfs_fast_charger_sw:s0
+/system/bin/fast_charger_sw                                                  u:object_r:fast_charger_sw_exec:s0
+/sys/devices/soc\.0/78b8000\.i2c/i2c-4/4-006b/power_supply/battery(/.*)?	u:object_r:sysfs_usb_supply:s0
+/sys/devices/soc\.0/78b8000\.i2c/i2c-4/4-006b/power_supply/ext-charger(/.*)?	u:object_r:sysfs_usb_supply:s0
 
 # Fingerprint
-/dev/vfsspi									u:object_r:vfs_device:s0
-/dev/validity(/.*)?							        u:object_r:fingerprintd_data_file:s0
-/data/validity(/.*)?								u:object_r:fingerprintd_data_file:s0
+/system/bin/vfmService                                                     u:object_r:vfmService_exec:s0
+/dev/vfsspi                                                                u:object_r:vfsspi_device:s0
+/dev/validity(/.*)?                                                        u:object_r:vfsspi_device:s0
+/data/validity(/.*)?                                                       u:object_r:vfsspi_data_file:s0
+/system/lib64/libvcsfp\.so                                                 u:object_r:vfsspi_system_file:s0
+/system/lib64/libvfmClient\.so                                             u:object_r:vfsspi_system_file:s0
+
+# Keylayout
+/system/usr/keylayout/gpio-keys\.kl                                        u:object_r:system_keylayout_file:s0
+/system/usr/keylayout/synaptics_rmi4_i2c\.kl                                u:object_r:system_keylayout_file:s0
+/system/usr/keylayout/synaptics_dsx\.kl                                        u:object_r:system_keylayout_file:s0
+/system/usr/keylayout/ft5x06_ts\.kl                                        u:object_r:system_keylayout_file:s0
+/system/usr/keylayout/goodix_ts\.kl                                        u:object_r:system_keylayout_file:s0
+
+# NFC
+/dev/bcm2079x                                                              u:object_r:nfc_device:s0
 
 # Touchscreen
 /sys/board_properties/tpd_suspend_status                                   u:object_r:sysfs_touchpanel:s0
-
-# Location
-/system/vendor/bin/location-mq                      u:object_r:location_exec:s0
-
-# tfa9890
-/dev/i2c-4									u:object_r:audio_device:s0
-
-# NFC
-/dev/bcm2079x									u:object_r:nfc_device:s0

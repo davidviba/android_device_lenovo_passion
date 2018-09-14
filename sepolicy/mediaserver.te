@@ -1,2 +1,0 @@
-allow mediaserver audiod:binder call;
-set_prop(mediaserver, mediaserver_prop)

@@ -1,3 +1,6 @@
+type debugfs_rmt, debugfs_type, fs_type;
 type debugfs_wlan, debugfs_type, fs_type;
-type sysfs_fast_charger_sw, fs_type, sysfs_type;
 type sysfs_touchpanel, fs_type, sysfs_type;
+type system_keylayout_file, system_file_type, file_type;
+type vfsspi_data_file, file_type, data_file_type;
+type vfsspi_system_file, system_file_type, file_type;
