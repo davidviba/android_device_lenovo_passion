@@ -29,8 +29,6 @@ ro.bluetooth.dun=false
 ro.bluetooth.sap=false
 
 # Camera
-persist.camera.HAL3.enabled=1
-persist.camera.gyro.android=0
 camera2.portability.force_api=1
 persist.camera.cpp.duplication=false
 media.stagefright.legacyencoder=true
@@ -67,7 +65,6 @@ media.msm8939hw=0
 mm.enable.smoothstreaming=true
 mmp.enable.3g2=true
 media.aac_51_output_enabled=true
-persist.media.treble_omx=false
 
 # Netmgr
 persist.data.mode=concurrent

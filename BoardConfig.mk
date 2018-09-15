@@ -56,11 +56,9 @@ TARGET_NO_BOOTLOADER := true
 # Camera
 TARGET_USES_NON_TREBLE_CAMERA := true
 USE_DEVICE_SPECIFIC_CAMERA := true
-TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
-TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
@@ -184,8 +182,7 @@ include device/qcom/sepolicy/legacy-sepolicy.mk
 # Shims
 TARGET_LD_SHIM_LIBS := \
     /system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so \
-    /system/vendor/lib/libmmcamera_wavelet_lib.so|libshim_atomic.so \
-    /system/lib/hw/camera.vendor.msm8916.so|libshim_atomic.so
+    /system/vendor/lib/libmmcamera_wavelet_lib.so|libshim_atomic.so
 
 # WiFi
 BOARD_HAS_QCOM_WLAN := true

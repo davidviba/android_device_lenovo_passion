@@ -16,8 +16,7 @@
 # Inherit device configuration
 $(call inherit-product, device/lenovo/passion/full_passion.mk)
 
-# Inherit some common CM stuff.
-#$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+# Inherit some common Aosp stuff.
 $(call inherit-product, vendor/aosp/common.mk)
 
 # Boot animation
@@ -28,7 +27,6 @@ TARGET_BOOT_ANIMATION_RES := 1080
 # Override build properties.
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="passion_row-user 6.0.1 MMB29M P1a42_S288_160721_ROW release-keys" \
-    DEVICE_MAINTAINERS="Daniel"
 
 BUILD_FINGERPRINT := Lenovo/passion_row/P1a42:6.0.1/MMB29M/P1a42_S288_160721_ROW:user/release-keys
 
