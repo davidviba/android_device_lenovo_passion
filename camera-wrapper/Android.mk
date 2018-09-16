@@ -25,9 +25,6 @@ LOCAL_C_INCLUDES := \
 LOCAL_SRC_FILES := \
     CameraWrapper.cpp
 
-LOCAL_STATIC_LIBRARIES := \
-    libarect
-
 LOCAL_SHARED_LIBRARIES := \
     libhardware \
     liblog \
@@ -38,6 +35,9 @@ LOCAL_SHARED_LIBRARIES := \
     libhidltransport \
     android.hidl.token@1.0-utils \
     android.hardware.graphics.bufferqueue@1.0
+
+LOCAL_STATIC_LIBRARIES := \
+    libarect
 
 LOCAL_HEADER_LIBRARIES := libnativebase_headers
 LOCAL_MODULE_RELATIVE_PATH := hw
