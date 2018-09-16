@@ -52,8 +52,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/native/data/etc/android.hardware.camera.full.xml:system/etc/permissions/android.hardware.camera.full.xml \
-    frameworks/native/data/etc/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
 
 # Audio
@@ -73,7 +71,7 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle
 
 PRODUCT_COPY_FILES += \
-   $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf
+   $(LOCAL_PATH)/audio/audio_effects.xml:system/vendor/etc/audio_effects.xml
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -139,9 +137,9 @@ PRODUCT_PACKAGES += \
 
 # Prebuilt
 PRODUCT_PACKAGES += \
+    MotoCamera \
     GoogleClock \
-    Recorder \
-    MotoCamera
+    Recorder
 
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
@@ -177,6 +175,7 @@ PRODUCT_PACKAGES += \
 
 # Healthd
 PRODUCT_PACKAGES += \
+    android.hardware.health@1.0-convert \
     android.hardware.health@1.0-impl \
     android.hardware.health@1.0-service
 
@@ -207,7 +206,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/ft5x06_ts.kl:system/usr/keylayout/ft5x06_ts.kl \
     $(LOCAL_PATH)/keylayout/goodix_ts.kl:system/usr/keylayout/goodix_ts.kl \
     $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # Keystore
 PRODUCT_PACKAGES += \

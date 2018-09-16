@@ -29,8 +29,7 @@ ro.bluetooth.dun=false
 ro.bluetooth.sap=false
 
 # Camera
-persist.camera.HAL3.enabled=1
-persist.camera.gyro.android=0
+persist.camera.hal.debug.mask=0
 camera2.portability.force_api=1
 persist.camera.cpp.duplication=false
 media.stagefright.legacyencoder=true
@@ -113,6 +112,9 @@ ro.max.fling_velocity=20000
 
 # Usb tethering
 persist.sys.usb.config.extra=none
+
+# Perf
+sys.use_fifo_ui=1
 
 # Screen density
 ro.sf.lcd_density=480
