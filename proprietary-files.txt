@@ -1,10 +1,10 @@
 # ADSP
-bin/adsprpcd
+bin/adsprpcd:vendor/bin/adsprpcd
 vendor/lib/libadsprpc.so
 vendor/lib64/libadsprpc.so
 
 # Audio
-bin/msm_irqbalance
+bin/msm_irqbalance:vendor/bin/msm_irqbalance
 lib/hw/audio.primary.msm8916.so:vendor/lib/hw/audio.primary.msm8916.so
 lib/libtinycompress.so|d2f3fba9008972e04b06c43b20c1456a2e059c66
 lib/libtfa98xx.so
@@ -49,15 +49,14 @@ etc/tfa98xx/speech.preset
 etc/tfa98xx/coldboot.patch
 
 # Bluetooth
-bin/btnvtool
-bin/hci_qcomm_init
+bin/hci_qcomm_init:vendor/bin/hci_qcomm_init
 vendor/lib/libbtnv.so
 vendor/lib64/libbtnv.so
 
 # Camera
 lib/libstlport.so
-bin/mm-qcamera-daemon
-lib/hw/camera.msm8916.so:lib/hw/camera.vendor.msm8916.so
+bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
+lib/hw/camera.msm8916.so:vendor/lib/hw/camera.vendor.msm8916.so
 lib/libmmjpeg_interface.so
 lib/libmmcamera_interface.so
 lib/libmm-qcamera.so
@@ -149,7 +148,7 @@ etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 
 # DRM
-bin/qseecomd
+bin/qseecomd:vendor/bin/qseecomd
 vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
@@ -162,12 +161,12 @@ vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
 
 # Fastcharger
-bin/fast_charger_sw
+bin/fast_charger_sw:vendor/bin/fast_charger_sw
 
 # Fingerprint
-bin/vfmAPITest
-bin/vfmService
-bin/vfmExTest
+bin/vfmAPITest:vendor/bin/vfmAPITest
+bin/vfmService:vendor/bin/vfmService
+bin/vfmExTest:vendor/bin/vfmExTest
 lib/libvcsfp.so
 lib/libvfmClient.so
 lib/libvfmtztransport.so
@@ -176,7 +175,7 @@ lib64/libvcsfp.so
 lib64/libvfmClient.so
 lib64/libvfmtztransport.so
 lib64/libvalAuth.so
-lib64/hw/fingerprint.default.so:lib64/hw/fingerprint.vendor.msm8916.so
+lib64/hw/fingerprint.default.so:vendor/lib64/hw/fingerprint.vendor.msm8916.so
 
 # Gatekeeper
 vendor/lib64/hw/gatekeeper.msm8916.so
@@ -279,10 +278,10 @@ vendor/lib64/libmmosal.so
 # NFC
 vendor/firmware/BCM20795A2_001.003.025.0005.0050_Generic_I2C_NCD_Unsigned_configdata.ncd
 vendor/firmware/BCM20795A2_001.003.025.0005.0051_Customers_China_NCD_Unsigned_configdata.ncd
-etc/libnfc-brcm.conf
-etc/libnfc-brcm-20795a20.conf
-etc/nfcee_access.xml
-lib64/hw/nfc_nci.bcm2079x.default.so
+etc/libnfc-brcm.conf:vendor/etc/libnfc-nci.conf
+etc/libnfc-brcm-20795a20.conf:vendor/etc/libnfc-brcm-20795a20
+etc/nfcee_access.xml:vendor/etc/nfcee_access.xml
+lib64/hw/nfc_nci.bcm2079x.default.so:vendorlib64/hw/nfc_nci.bcm2079x.msm8916.so
 
 # Perf
 vendor/bin/perfd
@@ -291,12 +290,12 @@ vendor/lib64/libqti-perfd-client.so
 vendor/bin/energy-awareness|a0419fdbdacebb5434717e9060c278521b7c9467
 
 # Peripheral manager
-bin/pm-service
+bin/pm-service:vendor/bin/pm-service
 vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Qualcomm framework
-bin/irsc_util
+bin/irsc_util:vendor/bin/irsc_util
 vendor/lib/libdiag.so
 vendor/lib/libdsi_netctrl.so
 vendor/lib/libdsutils.so
@@ -336,14 +335,14 @@ vendor/lib64/libmm-als.so
 
 # Radio
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|5978531de78ed0f64f559e9b44b791ff08620c5a
-bin/netmgrd
-bin/qmuxd
-bin/radish
-bin/rmt_storage
-etc/permissions/qcrilhook.xml
-etc/permissions/qcnvitems.xml
--framework/qcnvitems.jar|07661b43bc3ef8d7b42ef9ab03e358ed7759c392
--framework/qcrilhook.jar|fdaaf747df3353d1c96546280edfa10f3efeb59d
+bin/netmgrd:vendor/bin/netmgrd
+bin/qmuxd:vendor/bin/qmuxd
+bin/radish:vendor/bin/radish
+bin/rmt_storage:vendor/bin/rmt_storage
+etc/permissions/qcrilhook.xml:vendor/etc/permissions/qcrilhook.xml
+etc/permissions/qcnvitems.xml:vendor/etc/permissions/qcnvitems.xml
+-vendor/framework/qcnvitems.jar|07661b43bc3ef8d7b42ef9ab03e358ed7759c392
+-vendor/framework/qcrilhook.jar|fdaaf747df3353d1c96546280edfa10f3efeb59d
 vendor/bin/ATFWD-daemon|9778a62bb94f9eeb49190908bb9b74060acd4fa6
 vendor/lib/libcneapiclient.so
 vendor/lib/libcneqmiutils.so
@@ -377,7 +376,7 @@ etc/data/qmi_config.xml
 etc/data/dsi_config.xml
 
 # Sensorhub
-lib64/hw/sensors.msm8916.so:lib64/sensors.passion.so
+lib64/hw/sensors.msm8916.so:vendor/lib64/sensors.passion.so
 vendor/lib/libcalmodule_gyroscope.so
 vendor/lib64/libcalmodule_akm.so
 vendor/lib64/libcalmodule_gyroscope.so
@@ -389,8 +388,8 @@ vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
 
 # Time services
-bin/time_daemon
--app/TimeService/TimeService.apk|feddeae4dc4f38a95a1595a76e8701aa6200698e
+bin/time_daemon:vendor/bin/time_daemon
+-vendor/app/TimeService/TimeService.apk|feddeae4dc4f38a95a1595a76e8701aa6200698e
 -vendor/lib/libtime_genoff.so
 vendor/lib/libTimeService.so
 -vendor/lib64/libtime_genoff.so
@@ -412,8 +411,8 @@ vendor/etc/init/android.hardware.drm@1.0-service.widevine.rc|51a3168a0dbc064d78e
 vendor/lib/libwvhidl.so|f7288f7a7ed6765bd1d80d639a0aeb0c31eda795
 
 # WiFi
-etc/wifi/WCNSS_qcom_cfg.ini
-etc/wifi/fstman.ini
+etc/wifi/WCNSS_qcom_cfg.ini:vendor/etc/wifi/WCNSS_qcom_cfg.ini
+etc/wifi/fstman.ini:vendor/etc/wifi/fstman.ini
 vendor/lib/libxtwifi_ulp_adaptor.so
 vendor/lib64/libxtwifi_ulp_adaptor.so
-etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin:vendor/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin

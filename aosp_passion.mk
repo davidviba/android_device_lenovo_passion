@@ -13,11 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Inherit device configuration
-$(call inherit-product, device/lenovo/passion/full_passion.mk)
-
 # Inherit some common Aosp stuff.
 $(call inherit-product, vendor/aosp/common.mk)
+
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit from passion device
+$(call inherit-product, device/lenovo/passion/device.mk)
+
+# Device vendor
+$(call inherit-product, vendor/lenovo/passion/passion-vendor.mk)
 
 # Boot animation
 #TARGET_SCREEN_WIDTH := 1080
@@ -34,7 +41,7 @@ BUILD_FINGERPRINT := Lenovo/passion_row/P1a42:6.0.1/MMB29M/P1a42_S288_160721_ROW
 PRODUCT_DEVICE := passion
 PRODUCT_NAME := aosp_passion
 PRODUCT_BRAND := Lenovo
+PRODUCT_MODEL := Lenovo P1a42
 PRODUCT_MANUFACTURER := LENOVO
-PRODUCT_RELEASE_NAME := passion
 
-EXTENDED_BUILD_TYPE=OFFICIAL
+PRODUCT_GMS_CLIENTID_BASE := android-lenovo
