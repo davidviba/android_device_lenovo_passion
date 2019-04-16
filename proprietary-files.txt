@@ -1,14 +1,13 @@
 # ADSP
-bin/adsprpcd:vendor/bin/adsprpcd
+vendor/bin/adsprpcd
 vendor/lib/libadsprpc.so
 vendor/lib64/libadsprpc.so
 
 # Audio
-bin/msm_irqbalance:vendor/bin/msm_irqbalance
+vendor/bin/msm_irqbalance
 lib/hw/audio.primary.msm8916.so:vendor/lib/hw/audio.primary.msm8916.so
 lib/libtinycompress.so|d2f3fba9008972e04b06c43b20c1456a2e059c66
 lib/libtfa98xx.so
-vendor/lib/hw/sound_trigger.primary.msm8916.so
 vendor/lib/soundfx/libqcbassboost.so
 vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
@@ -48,15 +47,24 @@ etc/tfa98xx/music.preset
 etc/tfa98xx/speech.preset
 etc/tfa98xx/coldboot.patch
 
-# Bluetooth
-bin/hci_qcomm_init:vendor/bin/hci_qcomm_init
-vendor/lib/libbtnv.so
-vendor/lib64/libbtnv.so
+# Bluetooth - from Mi A1 tissot_sprout 9 PKQ1.180917.001.V10.0.2.0.PDHMIFK release-keys
+vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti|9178856dc8651b499d1b155825b6115a486ee05e
+vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc|a979981c55f3dcaf6cf2212e71b901ca4d58b959
+vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so|8c68d863da2456efbc95046519b99f23e517c9ab
+vendor/lib64/libbtnv.so|35444e0ca93a50751db92aa4871cf277dc66b1fa
+vendor/lib64/libbt-hidlclient.so|0b0b69ef9787e3cd5409f0050cad03698dd6ce26
+
+# ANT+ (vendor) - from Mi A1 tissot_sprout 9 PKQ1.180917.001.V10.0.2.0.PDHMIFK release-keys
+vendor/lib64/com.qualcomm.qti.ant@1.0.so|3a19c81d66ef1190d0b2f361420d5cbf707cc600
+
+# FM Radio - from Mi A1 tissot_sprout 9 PKQ1.180917.001.V10.0.2.0.PDHMIFK release-keys
+vendor/bin/fm_qsoc_patches|77f31379d6bf68f2f0b3aa8936150b778c4e89ee
+vendor/lib64/vendor.qti.hardware.fm@1.0.so|dc576dfcb0bf390a106b5ed8861e7f547110cbf1
 
 # Camera
 lib/libstlport.so
-bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
-lib/hw/camera.msm8916.so:vendor/lib/hw/camera.vendor.msm8916.so
+bin/mm-qcamera-daemon
+lib/hw/camera.msm8916.so:lib/hw/camera.vendor.msm8916.so
 lib/libmmjpeg_interface.so
 lib/libmmcamera_interface.so
 lib/libmm-qcamera.so
@@ -148,7 +156,7 @@ etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 
 # DRM
-bin/qseecomd:vendor/bin/qseecomd
+vendor/bin/qseecomd
 vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
@@ -161,21 +169,15 @@ vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
 
 # Fastcharger
-bin/fast_charger_sw:vendor/bin/fast_charger_sw
+vendor/bin/fast_charger_sw
 
 # Fingerprint
-bin/vfmAPITest:vendor/bin/vfmAPITest
-bin/vfmService:vendor/bin/vfmService
-bin/vfmExTest:vendor/bin/vfmExTest
-lib/libvcsfp.so
-lib/libvfmClient.so
-lib/libvfmtztransport.so
-lib/libvalAuth.so
-lib64/libvcsfp.so
-lib64/libvfmClient.so
-lib64/libvfmtztransport.so
-lib64/libvalAuth.so
-lib64/hw/fingerprint.default.so:vendor/lib64/hw/fingerprint.vendor.msm8916.so
+vendor/bin/vfmService
+vendor/lib64/libvcsfp.so
+vendor/lib64/libvfmClient.so
+vendor/lib64/libvfmtztransport.so
+vendor/lib64/libvalAuth.so
+lib64/hw/fingerprint.default.so:vendor/lib64/hw/fingerprint.msm8916.so
 
 # Gatekeeper
 vendor/lib64/hw/gatekeeper.msm8916.so
@@ -278,24 +280,20 @@ vendor/lib64/libmmosal.so
 # NFC
 vendor/firmware/BCM20795A2_001.003.025.0005.0050_Generic_I2C_NCD_Unsigned_configdata.ncd
 vendor/firmware/BCM20795A2_001.003.025.0005.0051_Customers_China_NCD_Unsigned_configdata.ncd
-etc/libnfc-brcm.conf:vendor/etc/libnfc-nci.conf
-etc/libnfc-brcm-20795a20.conf:vendor/etc/libnfc-brcm-20795a20
-etc/nfcee_access.xml:vendor/etc/nfcee_access.xml
-lib64/hw/nfc_nci.bcm2079x.default.so:vendorlib64/hw/nfc_nci.bcm2079x.msm8916.so
+lib64/hw/nfc_nci.bcm2079x.default.so:vendor/lib64/hw/nfc_nci.bcm2079x.msm8916.so
 
 # Perf
 vendor/bin/perfd
 vendor/lib/libqti-perfd-client.so
 vendor/lib64/libqti-perfd-client.so
-vendor/bin/energy-awareness|a0419fdbdacebb5434717e9060c278521b7c9467
 
 # Peripheral manager
-bin/pm-service:vendor/bin/pm-service
+bin/pm-service
 vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Qualcomm framework
-bin/irsc_util:vendor/bin/irsc_util
+bin/irsc_util
 vendor/lib/libdiag.so
 vendor/lib/libdsi_netctrl.so
 vendor/lib/libdsutils.so
@@ -335,15 +333,14 @@ vendor/lib64/libmm-als.so
 
 # Radio
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|5978531de78ed0f64f559e9b44b791ff08620c5a
-bin/netmgrd:vendor/bin/netmgrd
-bin/qmuxd:vendor/bin/qmuxd
-bin/radish:vendor/bin/radish
-bin/rmt_storage:vendor/bin/rmt_storage
-etc/permissions/qcrilhook.xml:vendor/etc/permissions/qcrilhook.xml
-etc/permissions/qcnvitems.xml:vendor/etc/permissions/qcnvitems.xml
--vendor/framework/qcnvitems.jar|07661b43bc3ef8d7b42ef9ab03e358ed7759c392
--vendor/framework/qcrilhook.jar|fdaaf747df3353d1c96546280edfa10f3efeb59d
-vendor/bin/ATFWD-daemon|9778a62bb94f9eeb49190908bb9b74060acd4fa6
+bin/netmgrd
+bin/qmuxd
+bin/radish
+bin/rmt_storage
+etc/permissions/qcrilhook.xml
+etc/permissions/qcnvitems.xml
+-framework/qcnvitems.jar|07661b43bc3ef8d7b42ef9ab03e358ed7759c392
+-framework/qcrilhook.jar|fdaaf747df3353d1c96546280edfa10f3efeb59d
 vendor/lib/libcneapiclient.so
 vendor/lib/libcneqmiutils.so
 vendor/lib/libcne.so
@@ -369,14 +366,13 @@ vendor/lib64/libsystem_health_mon.so
 vendor/lib64/libxml.so
 vendor/lib64/libconfigdb.so
 vendor/lib64/liblqe.so
-vendor/lib64/vendor.qti.hardware.radio.atcmdfwd@1.0_vendor.so|696875010aa0fd85bb90229b60675c8a6539dae1
 vendor/qcril.db
 etc/data/netmgr_config.xml
 etc/data/qmi_config.xml
 etc/data/dsi_config.xml
 
 # Sensorhub
-lib64/hw/sensors.msm8916.so:vendor/lib64/sensors.passion.so
+lib64/hw/sensors.msm8916.so:lib64/sensors.passion.so
 vendor/lib/libcalmodule_gyroscope.so
 vendor/lib64/libcalmodule_akm.so
 vendor/lib64/libcalmodule_gyroscope.so
@@ -387,13 +383,10 @@ vendor/lib/libthermalclient.so
 vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
 
-# Time services
-bin/time_daemon:vendor/bin/time_daemon
--vendor/app/TimeService/TimeService.apk|feddeae4dc4f38a95a1595a76e8701aa6200698e
--vendor/lib/libtime_genoff.so
-vendor/lib/libTimeService.so
--vendor/lib64/libtime_genoff.so
-vendor/lib64/libTimeService.so
+# Time services - from Mi A1 tissot_sprout 9 PKQ1.180917.001.V10.0.2.0.PDHMIFK release-keys
+-vendor/app/TimeService/TimeService.apk|78109530538aa8fb533ad288c9d356c57481a10e
+vendor/bin/time_daemon|bc58af8ed0cc94708aa75372565f4251991ab123
+-vendor/lib64/libtime_genoff.so|8f4c1f9ace6af463b241b130d6872b5d39cc7b2a
 
 # Venus (media) firmware
 etc/firmware/venus.b00
@@ -405,14 +398,20 @@ etc/firmware/venus.b01
 etc/firmware/venus.b02
 etc/firmware/ice40.bin
 
+# Power-off alarm- from Mi A1 tissot_sprout 9 PKQ1.180917.001.V10.0.2.0.PDHMIFK release-keys
+framework/vendor.qti.hardware.alarm-V1.0-java.jar|ca5bf830ebb4fbf8fc1994200ec6e03dc83c274b
+-vendor/app/PowerOffAlarm/PowerOffAlarm.apk|3fbc64ee84b17eaaf5f9002b58f4615216de0389
+vendor/bin/hw/vendor.qti.hardware.alarm@1.0-service|b7f648c81773214202aaa3620863d048c90713c7
+vendor/bin/power_off_alarm|459ccd83df3fcc076bb82bff60f47d14ad69ad6e
+vendor/etc/init/vendor.qti.hardware.alarm@1.0-service.rc|c9877b6cae0353d5fdea5bc23dba77101b3d6980
+vendor/lib64/hw/vendor.qti.hardware.alarm@1.0-impl.so|df138b77fb116a1a786a70c9c76b69d61b5c04d2
+vendor/lib64/vendor.qti.hardware.alarm@1.0.so|5761eae471e8dcd94ce139e831a1aa5b23f133c6
+
 # Widevine DRM - from marlin - OPM1.171019.011
 vendor/bin/hw/android.hardware.drm@1.0-service.widevine|fd6e14710c196fdd4131afe2ce10c4a5be1b309c
 vendor/etc/init/android.hardware.drm@1.0-service.widevine.rc|51a3168a0dbc064d78ee11ca83614c0cd2e6daa5
 vendor/lib/libwvhidl.so|f7288f7a7ed6765bd1d80d639a0aeb0c31eda795
 
 # WiFi
-etc/wifi/WCNSS_qcom_cfg.ini:vendor/etc/wifi/WCNSS_qcom_cfg.ini
-etc/wifi/fstman.ini:vendor/etc/wifi/fstman.ini
 vendor/lib/libxtwifi_ulp_adaptor.so
 vendor/lib64/libxtwifi_ulp_adaptor.so
-etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin:vendor/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin

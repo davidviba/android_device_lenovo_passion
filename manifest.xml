@@ -28,7 +28,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.bluetooth</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>IBluetoothHci</name>
@@ -41,7 +41,6 @@
         <version>2.4</version>
         <interface>
             <name>ICameraProvider</name>
-            <instance>external/0</instance>
             <instance>legacy/0</instance>
         </interface>
     </hal>
@@ -98,6 +97,15 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.graphics.mapper</name>
+        <transport arch="32+64">passthrough</transport>
+        <version>2.0</version>
+        <interface>
+            <name>IMapper</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.graphics.composer</name>
         <transport arch="32+64">passthrough</transport>
         <version>2.1</version>
@@ -109,7 +117,7 @@
     <hal format="hidl">
         <name>android.hardware.health</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>2.0</version>
         <interface>
             <name>IHealth</name>
             <instance>default</instance>
@@ -117,7 +125,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.keymaster</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>3.0</version>
         <interface>
             <name>IKeymasterDevice</name>
@@ -157,8 +165,8 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.nfc</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>1.1</version>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
         <interface>
             <name>INfc</name>
             <instance>default</instance>
@@ -167,7 +175,7 @@
     <hal format="hidl">
         <name>android.hardware.power</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>IPower</name>
             <instance>default</instance>
@@ -184,16 +192,6 @@
         </interface>
         <interface>
             <name>ISap</name>
-            <instance>slot1</instance>
-            <instance>slot2</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.radio.deprecated</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IOemHook</name>
             <instance>slot1</instance>
             <instance>slot2</instance>
         </interface>
@@ -271,12 +269,12 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.hardware.radio.atcmdfwd</name>
+        <name>vendor.qti.hardware.alarm</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>IAtCmdFwd</name>
-            <instance>AtCmdFwdService</instance>
+            <name>IAlarm</name>
+            <instance>default</instance>
         </interface>
     </hal>
     <hal format="hidl">

@@ -1,0 +1,117 @@
+#
+# system.prop for passion
+#
+
+# Audio
+ro.qc.sdk.audio.fluencetype=none
+persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=true
+ro.qc.sdk.audio.ssr=false
+tunnel.audio.encode=false
+audio.offload.buffer.size.kb=64
+audio.offload.min.duration.secs=30
+audio.offload.video=false
+use.voice.path.for.pcm.voip=true
+audio.offload.gapless.enabled=true
+audio.offload.multiple.enabled=false
+voice.playback.conc.disabled=true
+voice.record.conc.disabled=true
+voice.voip.conc.disabled=true
+
+# Bluetooh
+vendor.qcom.bluetooth.soc=smd
+
+# Charger
+log.tag.fast_charger_sw=W
+
+# Fingerprint
+log.tag.synaFpHal=W
+log.tag.SynapticsLIB=W
+log.tag.synaTransport=W
+
+# Camera
+vendor.camera.hal1.packagelist=com.android.facelock
+persist.camera.hal.debug.mask=0
+camera2.portability.force_api=1
+persist.camera.cpp.duplication=false
+vidc.enc.narrow.searchrange=1
+
+# Display
+persist.hwc.enable_vds=1
+ro.opengles.version=196609
+debug.sf.hw=0
+debug.egl.hw=0
+debug.composition.type=c2d
+persist.hwc.mdpcomp.enable=true
+debug.mdpcomp.logs=0
+dev.pm.dyn_samplingrate=1
+persist.demo.hdmirotationlock=false
+debug.mdpcomp.idletime=600
+debug.enable.sglscale=1
+ro.qualcomm.cabl=0
+
+# Dalvik heap
+dalvik.vm.heapstartsize=16m
+dalvik.vm.heapgrowthlimit=192m
+dalvik.vm.heapsize=512m
+dalvik.vm.heaptargetutilization=0.75
+dalvik.vm.heapminfree=2m
+dalvik.vm.heapmaxfree=8m
+
+# DRM
+drm.service.enabled=true
+
+# Factory reset protection
+ro.frp.pst=/dev/block/platform/soc.0/7824900.sdhci/by-name/config
+
+# FM
+ro.fm.transmitter=false
+vendor.hw.fm.init=0
+
+# Gps
+ro.gps.agps_provider=1
+
+# Media 
+media.msm8939hw=0
+mm.enable.smoothstreaming=true
+mmp.enable.3g2=true
+media.aac_51_output_enabled=true
+
+# Netmgr
+persist.data.mode=concurrent
+ro.use_data_netmgrd=true
+persist.data.netmgrd.qos.enable=true
+
+# Perf
+ro.vendor.extension_library=libqti-perfd-client.so
+
+# Qualcomm
+persist.delta_time.enable=true
+com.qc.hardware=true
+debug.qc.hardware=true
+debug.hwui.use_buffer_age=false
+
+# Radio
+rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
+rild.libargs=-d /dev/smd0
+persist.radio.apm_sim_not_pwdn=1
+persist.radio.multisim.config=dsds
+persist.data.qmi.adb_logmask=0
+ro.telephony.default_network=9,1
+persist.radio.rat_on=combine
+persist.radio.custom_ecc=1
+persist.radio.sib16_support=1
+persist.radio.aosp_usr_pref_sel=true
+
+# Rescue party
+persist.sys.disable_rescue=true
+
+# Usb tethering
+persist.sys.usb.config.extra=none
+
+# Screen density
+ro.sf.lcd_density=450
+
+# WiFi
+wifi.interface=wlan0

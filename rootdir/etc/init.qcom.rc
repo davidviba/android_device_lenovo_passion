@@ -25,58 +25,30 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import /vendor/etc/init/hw/init.qcom.usb.rc
-import /vendor/etc/init/hw/init.qcom.power.rc
+import init.qcom.usb.rc
+import init.qcom.power.rc
 
 on early-init
     mkdir /firmware 0771 system system
     mkdir /system 0777 root root
-    symlink /data/tombstones /tombstones
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
-    # make trace_marker everyone writable
-    chmod 222 /sys/kernel/debug/tracing/trace_marker
 
 on init
-    export LD_SHIM_LIBS /system/vendor/lib/libmmcamera2_stats_algorithm.so|libshim_atomic.so:/system/vendor/lib/libmmcamera_wavelet_lib.so|libshim_atomic.so
-
     # Set permissions for persist partition
     mkdir /persist 0771 system system
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
-    mkdir /mnt/media_rw/uicc0 0700 media_rw media_rw
-    mkdir /mnt/media_rw/uicc1 0700 media_rw media_rw
-    mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/uicc0 0700 root root
-    mkdir /storage/uicc1 0700 root root
-    mkdir /storage/usbotg 0700 root root
-
-    export EXTERNAL_STORAGE /sdcard
-    export SECONDARY_STORAGE /storage/sdcard1
-
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-    symlink /sdcard /storage/sdcard0
 
 on fs
     wait /dev/block/platform/soc.0/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc.0/${ro.boot.bootdevice} /dev/block/bootdevice
 
-    mount_all /vendor/etc/fstab.qcom --early
-
-    # Start HW service manager early
-    start hwservicemanager
+    mount_all fstab.qcom --early
 
     mkdir /persist/data 0700  system system
     restorecon_recursive /persist
 
-    # Remove existing log
-    rm /data/LOGCAT_P.txt
-
- service logcat_debug /system/bin/logcat -b -all -f /data/LOGCAT_P.txt -v threadtime
-    class main
-    user root
-    group system
+    # Start HW service manager early
+    start hwservicemanager
 
 on late-fs
     # Start services for bootanim
@@ -84,7 +56,8 @@ on late-fs
     start surfaceflinger
     start bootanim
     start vendor.gralloc-2-0
-    mount_all /vendor/etc/fstab.qcom --late
+
+    mount_all fstab.qcom --late
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -141,7 +114,26 @@ on boot
 
     #Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
-    
+
+    # Assign TCP buffer thresholds to be ceiling value of technology maximums
+    # Increased technology maximums should be reflected here.
+    write /proc/sys/net/core/rmem_max 2097152
+    write /proc/sys/net/core/wmem_max 2097152
+
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default "4096,87380,524288,4096,16384,110208"
+    setprop net.tcp.buffersize.lte "2097152,4194304,8388608,262144,524288,1048576"
+    setprop net.tcp.buffersize.umts "4094,87380,110208,4096,16384,110208"
+    setprop net.tcp.buffersize.hspa "4094,87380,1220608,4096,16384,1220608"
+    setprop net.tcp.buffersize.hsupa "4094,87380,1220608,4096,16384,1220608"
+    setprop net.tcp.buffersize.hsdpa "4094,87380,1220608,4096,16384,1220608"
+    setprop net.tcp.buffersize.hspap "4094,87380,1220608,4096,16384,1220608"
+    setprop net.tcp.buffersize.edge "4093,26280,35040,4096,16384,35040"
+    setprop net.tcp.buffersize.gprs "4092,8760,11680,4096,8760,11680"
+    setprop net.tcp.buffersize.evdo "4094,87380,524288,4096,16384,262144"
+    setprop net.tcp.2g_init_rwnd 10
+
     # Prevents permission denied error for telephony
     chmod 0644 /proc/cmdline
 
@@ -262,8 +254,8 @@ on property:sys.listeners.registered=true
      start vfmService
 
 on post-fs
-    # default country code
-    setprop ro.boot.wificountrycode 00
+    # Allow writing to the kernel trace log.
+    chmod 0222 /sys/kernel/debug/tracing/trace_marker
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -282,9 +274,6 @@ on post-fs-data
 
     # Create the directories used by the Wireless subsystem
     mkdir /data/vendor/wifi 0770 wifi wifi
-    mkdir /data/vendor/wifi/sockets 0770 wifi wifi
-    mkdir /data/vendor/wifi/hostapd/ctrl 0770 wifi wifi
-    mkdir /data/vendor/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
 
@@ -294,10 +283,6 @@ on post-fs-data
     # Create the directories used by DPM subsystem
     mkdir /data/dpm 0771 system system
     mkdir /data/dpm/nsrm 0771 system system
-
-    # NFC local data and nfcee xml storage
-    mkdir /data/vendor/nfc 0770 nfc nfc
-    mkdir /data/vendor/nfc/param 0770 nfc nfc
 
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
@@ -352,12 +337,12 @@ on post-fs-data
     mkdir /data/camera 0770 media camera
 
     #Create PERFD deamon related dirs
-    mkdir /data/misc/perfd 2770 root system
-    rm /data/misc/perfd/default_values
+    mkdir /data/system/perfd 2770 root system
+    rm /data/system/perfd/default_values
     start perfd
 
     #Create FM dir for patchdownloader
-    mkdir /data/misc/fm 0770 system system
+    mkdir /data/vendor/fm 0770 system system
 
     #WAPI
     mkdir /data/misc/wapi_certificate 0770 system wifi
@@ -407,63 +392,46 @@ on property:persist.debug.trace=1
     write /sys/bus/coresight/devices/coresight-etm3/enable 1
     write /sys/module/coresight_event/parameters/event_abort_enable 1
 
-on property:bluetooth.isEnabled=true
-    write /sys/class/bluetooth/hci0/idle_timeout 7000
-
-service qcom-c_main-sh /vendor/bin/init.class_main.sh
-    class main
-    user root
-    oneshot
-
 on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
-    start wcnss-service
     start vfmService
     restart camera-provider-2-4
 
-service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
+service qcom-c_main-sh /system/bin/sh /init.class_main.sh
     class main
     user root
     oneshot
 
-service rmt_storage /vendor/bin/rmt_storage
+service fm_dl /system/bin/sh /init.qti.fm.sh
+    class late_start
+    user system
+    group system
+    disabled
+    oneshot
+
+service irsc_util /system/bin/irsc_util "/system/etc/sec_config"
+    class main
+    user root
+    oneshot
+
+service rmt_storage /system/bin/rmt_storage
     class core
     user root
     shutdown critical
     ioprio rt 0
 
-service hciattach /vendor/bin/init.qcom.bt.sh
-    class late_start
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-on property:vendor.bluetooth.hciattach=true
-    start hciattach
-
-on property:vendor.bluetooth.hciattach=false
-    setprop bluetooth.status off
-
-# FM
-on property:hw.fm.init=0
-     write /sys/module/radio_iris_transport/parameters/fmsmd_set 0
-
-on property:hw.fm.init=1
-     write /sys/module/radio_iris_transport/parameters/fmsmd_set 1
-
-service qseecomd /vendor/bin/qseecomd
+service qseecomd /system/vendor/bin/qseecomd
    class core
    user root
    group root
 
-service perfd /vendor/bin/perfd
-    class main
+service perfd /system/vendor/bin/perfd
+    class late_start
     user root
     group root readproc system
-    disabled
+    socket perfd seqpacket 0666 root system
 
-service thermal-engine /vendor/bin/thermal-engine
+service thermal-engine /system/vendor/bin/thermal-engine
    class main
    user root
    socket thermal-send-client stream 0666 system system
@@ -471,47 +439,41 @@ service thermal-engine /vendor/bin/thermal-engine
    socket thermal-recv-passive-client stream 0666 system system
    group root
 
-service time_daemon /vendor/bin/time_daemon
+service time_daemon /system/vendor/bin/time_daemon
    class late_start
    user root
    group root
 
-service wcnss-service /vendor/bin/wcnss_service
-    class main
+service wcnss-service /system/vendor/bin/wcnss_service
+    class late_start
     user system
     group system wifi radio
     oneshot
 
-service per_mgr /vendor/bin/pm-service
+service per_mgr /system/bin/pm-service
     class core
     user system
     group system net_raw
 
 #start camera server as daemon
-service qcamerasvr /vendor/bin/mm-qcamera-daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
-    group camera system inet input graphics
+    group camera gps system inet input graphics
 
 # QMUX must be in multiple groups to support external process connections
-service qmuxd /vendor/bin/qmuxd
+service qmuxd /system/bin/qmuxd
     class main
     user root
     group radio audio bluetooth gps nfc oem_2901
     disabled
 
-service atfwd /vendor/bin/ATFWD-daemon
-    class late_start
-    user system
-    group system radio
-
-service netmgrd /vendor/bin/netmgrd
+service netmgrd /system/bin/netmgrd
     class main
     user root
     group root wifi wakelock radio inet
     disabled
 
-# we will start as root and wpa_supplicant will switch to user wifi
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
     -g@android:wpa_wlan0
@@ -522,51 +484,48 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service energy-awareness /vendor/bin/energy-awareness
-    class main
-    user root
-    group system
-    oneshot
-
 #lenovo-sw weiweij added for fast_charger_sw fast charger switch dameon
-service fast_charger_sw /vendor/bin/fast_charger_sw
+service fast_charger_sw /system/vendor/bin/fast_charger_sw
     class main
     user root
 #lenovo-sw weiweij added for fast_charger_sw fast charger switch dameon end
 
 #lenovo-sw, chenzz3, added fingerprint daemon service, begin
-service vfmService /vendor/bin/vfmService
+service vfmService /system/vendor/bin/vfmService
     user system
     group system
     class main
 #lenovo-sw, chenzz3, added fingerprint daemon service, end
 
 #loc_launcher will start as root and set its uid to gps
-service loc_launcher /vendor/bin/loc_launcher
+service loc_launcher /system/vendor/bin/loc_launcher
     class late_start
     group gps inet oem_2901 wifi
 
-service ril-daemon2 /vendor/bin/hw/rild -c 2
+service ril-daemon2 /system/vendor/bin/hw/rild -c 2
     class main
     user radio
     group radio cache inet misc audio log readproc wakelock
     capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
 
 on property:init.svc.surfaceflinger=restarting
-    stop hwcomposer-2-1
-    start hwcomposer-2-1
+    restart hwcomposer-2-1
 
 service charger /charger
     class charger
     group system graphics
 
-service msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance.conf
+service power_off_alarm /system/vendor/bin/power_off_alarm
+    class core
+    group system
+    disabled
+    oneshot
+
+on property:vendor.camera.hal1.packagelist=*
+    setprop camera.hal1.packagelist ${vendor.camera.hal1.packagelist}
+
+service msm_irqbalance /system/vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     class core
     user root
     group root
     disabled
-
-on charger
-    load_system_props
-    setprop sys.usb.configfs 0
-    start fast_charger_sw

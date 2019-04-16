@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2019 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),passion)
-LOCAL_SRC_FILES += libbt-vendor.so:system/lib/libbt-vendor.so
-LOCAL_SRC_FILES += libbt-vendor.so:obj/SHARED_LIBRARIES/libbt-vendor_intermediates/LINKED/libbt-vendor.so
-LOCAL_SRC_FILES += libbt-vendor.so:symbols/system/lib/libbt-vendor.so
-LOCAL_SRC_FILES += libbt-vendor.so:obj/lib/libbt-vendor.so
-LOCAL_SRC_FILES += export_includes:obj/SHARED_LIBRARIES/libbt-vendor_intermediates/export_includes
+ifneq ($(filter passion,$(TARGET_DEVICE)),)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 

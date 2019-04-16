@@ -5,12 +5,12 @@
 | Feature                 | Specification                                 |
 | :---------------------- | :---------------------------------------------|
 | CPU                     | Quad-core 1.5/1.6 GHz & quad-core 1.1/1.2 GHz |
-| Chipset                 | Qualcomm MSM8939 Snapdragon 615/616           |
+| Chipset                 | Qualcomm MSM8916 Snapdragon 615/616           |
 | GPU                     | Adreno 405                            	  |
 | Memory                  | 2/3GB RAM                             	  |
 | Shipped Android Version | (5.1)                                 	  |
 | Storage                 | 32 GB                                 	  |
-| MicroSD                 | Up to 256GB                           	  |
+| MicroSD                 | Up to 128GB                           	  |
 | Battery                 | 5000/4900 mAh                              	  |
 | Dimensions              | 152.9 x 75.6 x 9.9 mm                         |
 | Display                 | 1080 x 1920 pixels                            |
@@ -25,7 +25,7 @@
 
 ```
 #
-# Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2019 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
